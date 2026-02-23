@@ -1,3 +1,4 @@
+import 'package:chat_application_task/features/auth/views/sign_in_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainApp extends StatelessWidget {
@@ -11,16 +12,8 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: Home(),
+      home: SignInScreen(),
     );
   }
 }
 
-class Home extends StatelessWidget {
-  const Home({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
