@@ -1,5 +1,5 @@
-import 'package:chat_application_task/features/auth/views/sign_in_screen.dart';
-import 'package:chat_application_task/features/auth/views/sign_up_screen.dart';
+import 'package:chat_application_task/features/auth/views/screens/sign_in_screen.dart';
+import 'package:chat_application_task/features/auth/views/screens/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainApp extends StatelessWidget {

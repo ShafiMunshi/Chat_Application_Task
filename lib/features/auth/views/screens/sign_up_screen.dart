@@ -1,6 +1,6 @@
 import 'package:chat_application_task/core/constants/dimens.dart';
 import 'package:chat_application_task/core/style/text_styles.dart';
-import 'package:chat_application_task/features/auth/views/sign_in_screen.dart';
+import 'package:chat_application_task/features/auth/views/screens/sign_in_screen.dart';
 import 'package:chat_application_task/features/auth/views/widgets/app_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
