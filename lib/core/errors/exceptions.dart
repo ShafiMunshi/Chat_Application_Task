@@ -80,3 +80,22 @@ class ParsingException implements Exception {
   @override
   String toString() => 'ParsingException: $message';
 }
+
+
+class PermissionDeniedException implements Exception {
+  final String message;
+
+  PermissionDeniedException({required this.message});
+
+  @override
+  String toString() => 'PermissionDeniedException: $message';
+}
+
+class UnknownException implements Exception {
+  final String message;
+
+  UnknownException({required this.message});
+
+  @override
+  String toString() => 'UnknownException: $message';
+}

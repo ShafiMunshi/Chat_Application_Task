@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:chat_application_task/core/errors/exceptions.dart';
+import 'package:chat_application_task/core/errors/firebase_exceptions_mapper.dart';
 import 'package:chat_application_task/features/auth/data/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 
 import '../../../../core/shared/providers.dart';
 
@@ -51,9 +53,10 @@ class AuthRemoteSource implements IAuthRemoteSource {
         }
       }
     } on FirebaseAuthException catch (e) {
-      throw AuthenticationException(
-        message: e.message ?? 'Authentication failed',
+      Logger().e(
+        'FirebaseAuthException during sign up: ${e.message} && code: ${e.code}',
       );
+      throw FirebaseExceptionsMapper.mapFirebaseException(e);
     } on SocketException {
       throw NetworkException(message: 'No internet connection');
     } catch (e) {
@@ -92,9 +95,8 @@ class AuthRemoteSource implements IAuthRemoteSource {
         return userModel;
       }
     } on FirebaseAuthException catch (e) {
-      throw AuthenticationException(
-        message: e.message ?? 'Registration failed',
-      );
+      Logger().e('FirebaseAuthException during sign up: ${e.message}');
+      throw FirebaseExceptionsMapper.mapFirebaseException(e);
     } on SocketException {
       throw NetworkException(message: 'No internet connection');
     } catch (e) {
