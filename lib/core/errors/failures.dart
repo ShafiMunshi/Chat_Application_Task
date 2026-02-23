@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chat_application_task/core/errors/exceptions.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 part 'failures.freezed.dart';
@@ -12,6 +14,12 @@ abstract class Failure with _$Failure {
         ServerException() => Failure(message: e.message),
         ParsingException() => Failure(message: e.message),
         ValidationException() => Failure(message: e.message),
+        AuthenticationException() => Failure(message: e.message),
+        SocketException() => const Failure(
+          message:
+              'Unable to connect.'
+              'Please check your internet connection and try again.',
+        ),
         NotFoundException() => Failure(message: e.message),
         NetworkException() => const Failure(
           message:
