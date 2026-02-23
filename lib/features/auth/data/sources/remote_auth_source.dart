@@ -4,6 +4,15 @@ import 'package:chat_application_task/core/errors/exceptions.dart';
 import 'package:chat_application_task/features/auth/data/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../../core/shared/providers.dart';
+
+final authRemoteSourceProvider = Provider<IAuthRemoteSource>((ref) {
+  final firebaseAuth = ref.read(firebaseAuthProvider);
+  final firebaseFirestore = ref.read(firebaseFirestoreProvider);
+  return AuthRemoteSource(firebaseAuth, firebaseFirestore);
+});
 
 abstract interface class IAuthRemoteSource {
   Future<UserModel> signIn(Map<String, dynamic> signInData);

@@ -3,17 +3,14 @@ import 'package:chat_application_task/features/auth/domain/entities/sign_in_enti
 import 'package:chat_application_task/features/auth/domain/repo/iauth_repo.dart';
 import 'package:multiple_result/multiple_result.dart';
 
-final class LoginUseCase {
-  LoginUseCase(this.repository);
+final class SignInUseCase {
+  SignInUseCase(this.repository);
 
   final IAuthRepo repository;
 
-  Future<Result<SignInResponseEntity, Failure>> call({
-    required String email,
-    required String password,
-    bool? shouldRemember,
-  }) async {
-    final request = SignInRequestEntity(email: email, password: password);
+  Future<Result<SignInResponseEntity, Failure>> call(
+     SignInRequestEntity request,
+  ) async {
     return await repository.signIn(request);
   }
 }

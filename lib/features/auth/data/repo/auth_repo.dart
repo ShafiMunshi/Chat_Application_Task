@@ -4,10 +4,16 @@ import 'package:chat_application_task/features/auth/data/sources/remote_auth_sou
 import 'package:chat_application_task/features/auth/domain/entities/sign_in_entity.dart';
 import 'package:chat_application_task/features/auth/domain/entities/sign_up_entity.dart';
 import 'package:chat_application_task/features/auth/domain/repo/iauth_repo.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:multiple_result/multiple_result.dart';
 
+final authRepoProvider = Provider<IAuthRepo>((ref) {
+  final remoteDataSource = ref.read(authRemoteSourceProvider);
+  return AuthRepo(remoteDataSource);
+});
+
 class AuthRepo implements IAuthRepo {
-  final AuthRemoteSource remoteDataSource;
+  final IAuthRemoteSource remoteDataSource;
 
   AuthRepo(this.remoteDataSource);
   @override
