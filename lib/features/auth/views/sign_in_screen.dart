@@ -56,7 +56,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     ),
                     const Gap(30),
                     emailAddressField(),
-                    const Gap(16),
+                    const Gap(10),
                     passwordField(),
                     const Gap(24),
                     signInButton(context),
