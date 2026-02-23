@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:chat_application_task/core/errors/exceptions.dart';
 import 'package:chat_application_task/core/errors/firebase_exceptions_mapper.dart';
 import 'package:chat_application_task/features/auth/data/models/user_model.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
 import '../../../../core/shared/providers.dart';
+import '../../domain/entities/user_entity.dart';
 
 final authRemoteSourceProvider = Provider<IAuthRemoteSource>((ref) {
   final firebaseAuth = ref.read(firebaseAuthProvider);
@@ -19,6 +19,7 @@ final authRemoteSourceProvider = Provider<IAuthRemoteSource>((ref) {
 abstract interface class IAuthRemoteSource {
   Future<UserModel> signIn(Map<String, dynamic> signInData);
   Future<UserModel> signUp(Map<String, dynamic> signUpData);
+  Stream<UserEntity?> authStateChanges();
 }
 
 class AuthRemoteSource implements IAuthRemoteSource {
@@ -102,5 +103,13 @@ class AuthRemoteSource implements IAuthRemoteSource {
     } catch (e) {
       throw AuthenticationException(message: e.toString());
     }
+  }
+
+  @override
+  Stream<UserEntity?> authStateChanges() {
+    return firebaseAuth.authStateChanges().map((user) {
+      if (user == null) return null;
+      return UserEntity(id: user.uid, email: user.email ?? '');
+    });
   }
 }
