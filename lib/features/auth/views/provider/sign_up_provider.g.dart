@@ -9,28 +9,28 @@ part of 'sign_up_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(SignUpProvider)
-final signUpProviderProvider = SignUpProviderProvider._();
+@ProviderFor(SignUp)
+final signUpProvider = SignUpProvider._();
 
-final class SignUpProviderProvider
-    extends $NotifierProvider<SignUpProvider, AsyncValue<dynamic>> {
-  SignUpProviderProvider._()
+final class SignUpProvider
+    extends $NotifierProvider<SignUp, AsyncValue<dynamic>> {
+  SignUpProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'signUpProviderProvider',
+        name: r'signUpProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$signUpProviderHash();
+  String debugGetCreateSourceHash() => _$signUpHash();
 
   @$internal
   @override
-  SignUpProvider create() => SignUpProvider();
+  SignUp create() => SignUp();
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(AsyncValue<dynamic> value) {
@@ -41,9 +41,9 @@ final class SignUpProviderProvider
   }
 }
 
-String _$signUpProviderHash() => r'010ad673a5493f7ce099cf9f209e6634a74678d4';
+String _$signUpHash() => r'f9d3a1ea47a54ecb2c21aee45e9e6c1d5f71c436';
 
-abstract class _$SignUpProvider extends $Notifier<AsyncValue<dynamic>> {
+abstract class _$SignUp extends $Notifier<AsyncValue<dynamic>> {
   AsyncValue<dynamic> build();
   @$mustCallSuper
   @override

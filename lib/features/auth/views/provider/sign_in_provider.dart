@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'sign_in_provider.g.dart';
 
 @riverpod
-class SignInProvider extends _$SignInProvider {
+class SignIn extends _$SignIn {
   @override
   AsyncValue build() {
     return const AsyncValue.data(null);

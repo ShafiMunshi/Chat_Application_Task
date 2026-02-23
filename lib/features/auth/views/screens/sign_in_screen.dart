@@ -1,7 +1,9 @@
 import 'package:chat_application_task/core/constants/dimens.dart';
 import 'package:chat_application_task/core/style/text_styles.dart';
+import 'package:chat_application_task/features/auth/views/provider/sign_in_provider.dart';
 import 'package:chat_application_task/features/auth/views/screens/sign_up_screen.dart';
 import 'package:chat_application_task/features/auth/views/widgets/app_textfield.dart';
+import 'package:chat_application_task/features/chat/views/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_validator/form_validator.dart';
@@ -24,6 +26,23 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+
+    ref.listenManual(signInProvider, (previous, next) {
+      switch (next) {
+        case AsyncData(:final value) when value != null:
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const ChatScreen()),
+          );
+        case AsyncError(:final error):
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(error.toString())));
+
+        default:
+        // Do nothing
+      }
+    });
   }
 
   @override
@@ -129,9 +148,12 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       child: ElevatedButton(
         onPressed: () {
           if (_formKey.currentState!.validate()) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(const SnackBar(content: Text('Sign In Successful')));
+            ref
+                .read(signInProvider.notifier)
+                .signIn(
+                  email: _emailController.text.trim(),
+                  password: _passwordController.text.trim(),
+                );
           }
         },
         style: ElevatedButton.styleFrom(
