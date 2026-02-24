@@ -119,7 +119,7 @@ class _IndivChatScreenState extends State<IndivChatScreen>
     if (animate) {
       _scrollController.animateTo(
         max,
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 1000),
         curve: Curves.easeOutCubic,
       );
     } else {
