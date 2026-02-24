@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Message {
 
- String get id; String get senderId; String get text; DateTime get timestamp; MessageStatus get status;
+ String get id; String get senderId; String get text; String get content; DateTime get timestamp; MessageStatus get status;
 /// Create a copy of Message
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $MessageCopyWith<Message> get copyWith => _$MessageCopyWithImpl<Message>(this as
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Message&&(identical(other.id, id) || other.id == id)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.text, text) || other.text == text)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Message&&(identical(other.id, id) || other.id == id)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.text, text) || other.text == text)&&(identical(other.content, content) || other.content == content)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.status, status) || other.status == status));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,senderId,text,timestamp,status);
+int get hashCode => Object.hash(runtimeType,id,senderId,text,content,timestamp,status);
 
 @override
 String toString() {
-  return 'Message(id: $id, senderId: $senderId, text: $text, timestamp: $timestamp, status: $status)';
+  return 'Message(id: $id, senderId: $senderId, text: $text, content: $content, timestamp: $timestamp, status: $status)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $MessageCopyWith<$Res>  {
   factory $MessageCopyWith(Message value, $Res Function(Message) _then) = _$MessageCopyWithImpl;
 @useResult
 $Res call({
- String id, String senderId, String text, DateTime timestamp, MessageStatus status
+ String id, String senderId, String text, String content, DateTime timestamp, MessageStatus status
 });
 
 
@@ -62,11 +62,12 @@ class _$MessageCopyWithImpl<$Res>
 
 /// Create a copy of Message
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? senderId = null,Object? text = null,Object? timestamp = null,Object? status = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? senderId = null,Object? text = null,Object? content = null,Object? timestamp = null,Object? status = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,senderId: null == senderId ? _self.senderId : senderId // ignore: cast_nullable_to_non_nullable
 as String,text: null == text ? _self.text : text // ignore: cast_nullable_to_non_nullable
+as String,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
 as String,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as DateTime,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as MessageStatus,
@@ -154,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String senderId,  String text,  DateTime timestamp,  MessageStatus status)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String senderId,  String text,  String content,  DateTime timestamp,  MessageStatus status)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Message() when $default != null:
-return $default(_that.id,_that.senderId,_that.text,_that.timestamp,_that.status);case _:
+return $default(_that.id,_that.senderId,_that.text,_that.content,_that.timestamp,_that.status);case _:
   return orElse();
 
 }
@@ -175,10 +176,10 @@ return $default(_that.id,_that.senderId,_that.text,_that.timestamp,_that.status)
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String senderId,  String text,  DateTime timestamp,  MessageStatus status)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String senderId,  String text,  String content,  DateTime timestamp,  MessageStatus status)  $default,) {final _that = this;
 switch (_that) {
 case _Message():
-return $default(_that.id,_that.senderId,_that.text,_that.timestamp,_that.status);case _:
+return $default(_that.id,_that.senderId,_that.text,_that.content,_that.timestamp,_that.status);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +196,10 @@ return $default(_that.id,_that.senderId,_that.text,_that.timestamp,_that.status)
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String senderId,  String text,  DateTime timestamp,  MessageStatus status)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String senderId,  String text,  String content,  DateTime timestamp,  MessageStatus status)?  $default,) {final _that = this;
 switch (_that) {
 case _Message() when $default != null:
-return $default(_that.id,_that.senderId,_that.text,_that.timestamp,_that.status);case _:
+return $default(_that.id,_that.senderId,_that.text,_that.content,_that.timestamp,_that.status);case _:
   return null;
 
 }
@@ -210,12 +211,13 @@ return $default(_that.id,_that.senderId,_that.text,_that.timestamp,_that.status)
 
 
 class _Message implements Message {
-  const _Message({required this.id, required this.senderId, required this.text, required this.timestamp, required this.status});
+  const _Message({required this.id, required this.senderId, required this.text, required this.content, required this.timestamp, required this.status});
   
 
 @override final  String id;
 @override final  String senderId;
 @override final  String text;
+@override final  String content;
 @override final  DateTime timestamp;
 @override final  MessageStatus status;
 
@@ -229,16 +231,16 @@ _$MessageCopyWith<_Message> get copyWith => __$MessageCopyWithImpl<_Message>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Message&&(identical(other.id, id) || other.id == id)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.text, text) || other.text == text)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.status, status) || other.status == status));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Message&&(identical(other.id, id) || other.id == id)&&(identical(other.senderId, senderId) || other.senderId == senderId)&&(identical(other.text, text) || other.text == text)&&(identical(other.content, content) || other.content == content)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp)&&(identical(other.status, status) || other.status == status));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,senderId,text,timestamp,status);
+int get hashCode => Object.hash(runtimeType,id,senderId,text,content,timestamp,status);
 
 @override
 String toString() {
-  return 'Message(id: $id, senderId: $senderId, text: $text, timestamp: $timestamp, status: $status)';
+  return 'Message(id: $id, senderId: $senderId, text: $text, content: $content, timestamp: $timestamp, status: $status)';
 }
 
 
@@ -249,7 +251,7 @@ abstract mixin class _$MessageCopyWith<$Res> implements $MessageCopyWith<$Res> {
   factory _$MessageCopyWith(_Message value, $Res Function(_Message) _then) = __$MessageCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String senderId, String text, DateTime timestamp, MessageStatus status
+ String id, String senderId, String text, String content, DateTime timestamp, MessageStatus status
 });
 
 
@@ -266,11 +268,12 @@ class __$MessageCopyWithImpl<$Res>
 
 /// Create a copy of Message
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? senderId = null,Object? text = null,Object? timestamp = null,Object? status = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? senderId = null,Object? text = null,Object? content = null,Object? timestamp = null,Object? status = null,}) {
   return _then(_Message(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,senderId: null == senderId ? _self.senderId : senderId // ignore: cast_nullable_to_non_nullable
 as String,text: null == text ? _self.text : text // ignore: cast_nullable_to_non_nullable
+as String,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
 as String,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
 as DateTime,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as MessageStatus,

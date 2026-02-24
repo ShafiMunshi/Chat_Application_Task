@@ -9,6 +9,7 @@ abstract class Message with _$Message {
     required String id,
     required String senderId,
     required String text,
+    required String content,
     required DateTime timestamp,
     required MessageStatus status,
   }) = _Message;

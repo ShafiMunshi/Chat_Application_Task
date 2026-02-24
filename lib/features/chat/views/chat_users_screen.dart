@@ -1,9 +1,11 @@
 import 'package:chat_application_task/core/constants/app_colors.dart';
 import 'package:chat_application_task/core/constants/app_strings.dart';
+import 'package:chat_application_task/features/chat/views/providers/all_chat_users_provider.dart';
 import 'package:chat_application_task/features/chat/views/widgets/user_avatar.dart';
 import 'package:chat_application_task/features/chat/views/widgets/user_list_item.dart';
 import 'package:chat_application_task/features/chat/views/widgets/user_search_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class ChatUsersScreen extends StatefulWidget {
@@ -45,22 +47,41 @@ class _ChatUsersScreenState extends State<ChatUsersScreen> {
       body: Column(
         children: [
           UserSearchBar(controller: _searchController),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 10,
+          const AllChatUsersDisplay(),
+        ],
+      ),
+    );
+  }
+}
+
+class AllChatUsersDisplay extends ConsumerWidget {
+  const AllChatUsersDisplay({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Expanded(
+      child: ref
+          .watch(allUserStreamProvider)
+          .when(
+            data: (users) => ListView.builder(
+              itemCount: users.length,
               itemBuilder: (context, index) {
+                final user = users[index];
                 return UserListItem(
-                  name: '${AppStrings.userLabelPrefix}${index + 1}',
+                  name: user.name,
                   lastMessage: AppStrings.lastMessagePreview,
-                  avatarLabel: 'U${index + 1}',
+                  avatarLabel: user.profilePictureUrl?.isNotEmpty ?? false
+                      ? user.profilePictureUrl![0]
+                      : user.name[0],
                   timestamp: '${index + 1}:0${index}m',
                   onTap: () => context.push('/chat'),
                 );
               },
             ),
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, stack) =>
+                const Center(child: Text('Error loading users')),
           ),
-        ],
-      ),
     );
   }
 }

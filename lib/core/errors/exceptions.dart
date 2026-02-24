@@ -91,6 +91,15 @@ class PermissionDeniedException implements Exception {
   String toString() => 'PermissionDeniedException: $message';
 }
 
+class FirebaseDataException implements Exception {
+  final String message;
+
+  FirebaseDataException({required this.message});
+
+  @override
+  String toString() => 'FirebaseDataException: $message';
+}
+
 class UnknownException implements Exception {
   final String message;
 
