@@ -1,5 +1,7 @@
 import 'package:chat_application_task/features/auth/domain/entities/sign_in_entity.dart';
 import 'package:chat_application_task/features/auth/domain/entities/sign_up_entity.dart';
+import 'package:chat_application_task/features/auth/domain/entities/user_entity.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_model.freezed.dart';
@@ -31,6 +33,15 @@ extension UserModelX on UserModel {
     return SignUpResponseEntity(
       token: refreshToken,
       isSignUpSuccess: uid.isNotEmpty,
+    );
+  }
+
+  UserEntity toUserEntity() {
+    return UserEntity(
+      id: uid,
+      name: name,
+      email: email,
+      profilePictureUrl: profilePictureUrl,
     );
   }
 }

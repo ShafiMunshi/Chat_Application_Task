@@ -115,7 +115,12 @@ class AuthRemoteSource implements IAuthRemoteSource {
   Stream<UserEntity?> authStateChanges() {
     return firebaseAuth.authStateChanges().map((user) {
       if (user == null) return null;
-      return UserEntity(id: user.uid, email: user.email ?? '');
+      return UserEntity(
+        id: user.uid,
+        name: user.displayName ?? '',
+        email: user.email ?? '',
+        profilePictureUrl: user.photoURL,
+      );
     });
   }
 }
