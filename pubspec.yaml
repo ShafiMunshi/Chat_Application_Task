@@ -19,7 +19,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_riverpod: ^3.0.0
-  riverpod_annotation: 
+  flutter_screenutil: ^5.9.3
   flutter_secure_storage: ^10.0.0
   form_validator: ^2.1.1
   freezed_annotation: ^3.1.0
@@ -29,7 +29,9 @@ dependencies:
   intl: ^0.20.2
   logger: ^2.6.0
   multiple_result: ^5.2.0
+  riverpod_annotation: null
   shared_preferences: ^2.3.1
+  speech_to_text: ^7.3.0
   sqflite: ^2.4.2
 
 dev_dependencies:
@@ -41,7 +43,6 @@ dev_dependencies:
   freezed: ^3.2.3
   json_serializable: ^6.11.0
   riverpod_generator: ^4.0.0+1
-
 
 flutter:
   uses-material-design: true
