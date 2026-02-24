@@ -41,7 +41,7 @@ final class SignUpProvider
   }
 }
 
-String _$signUpHash() => r'f9d3a1ea47a54ecb2c21aee45e9e6c1d5f71c436';
+String _$signUpHash() => r'40847f889bfc4617c0cdaabd81db96e1685bb0f1';
 
 abstract class _$SignUp extends $Notifier<AsyncValue<dynamic>> {
   AsyncValue<dynamic> build();

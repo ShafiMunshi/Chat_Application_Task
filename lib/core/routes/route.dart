@@ -4,13 +4,12 @@ import 'package:chat_application_task/core/splash/splash_screen.dart';
 import 'package:chat_application_task/features/auth/views/provider/auth_provider.dart';
 import 'package:chat_application_task/features/auth/views/screens/sign_in_screen.dart';
 import 'package:chat_application_task/features/auth/views/screens/sign_up_screen.dart';
-import 'package:chat_application_task/features/chat/views/indiv_chat_screen.dart';
 import 'package:chat_application_task/features/chat/views/chat_users_screen.dart';
+import 'package:chat_application_task/features/chat/views/indiv_chat_screen.dart';
+import 'package:chat_application_task/features/chat/views/widgets/ui_message.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../features/chat/views/widgets/chat_app_bar.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   final notifier = _AuthNotifier();
