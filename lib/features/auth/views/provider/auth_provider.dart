@@ -6,3 +6,10 @@ final authStateProvider = StreamProvider<UserEntity?>((ref) {
   final repo = ref.watch(authRepoProvider);
   return repo.authStateChanges();
 });
+
+final signOutProvider = FutureProvider<void>((ref) async {
+  final repo = ref.watch(authRepoProvider);
+  final result = await repo.signOut();
+
+  return result.when((data) => data, (error) => throw Exception(error.message));
+});

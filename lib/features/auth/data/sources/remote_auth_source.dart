@@ -19,6 +19,7 @@ final authRemoteSourceProvider = Provider<IAuthRemoteSource>((ref) {
 abstract interface class IAuthRemoteSource {
   Future<UserModel> signIn(Map<String, dynamic> signInData);
   Future<UserModel> signUp(Map<String, dynamic> signUpData);
+  Future<void> signOut();
   Stream<UserEntity?> authStateChanges();
 }
 
@@ -103,6 +104,11 @@ class AuthRemoteSource implements IAuthRemoteSource {
     } catch (e) {
       throw AuthenticationException(message: e.toString());
     }
+  }
+
+  @override
+  Future<void> signOut() async {
+    await firebaseAuth.signOut();
   }
 
   @override

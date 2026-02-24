@@ -1,5 +1,6 @@
 import 'package:chat_application_task/features/auth/domain/entities/sign_in_entity.dart';
 import 'package:chat_application_task/features/auth/domain/usecases/usecases.dart';
+import 'package:chat_application_task/features/auth/views/provider/auth_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'sign_in_provider.g.dart';
@@ -22,9 +23,11 @@ class SignIn extends _$SignIn {
         .read(signInUsecaseProvider)
         .call(SignInRequestEntity(email: email, password: password));
 
-    state = result.when(
-      (data) => AsyncValue.data(data),
-      (error) => AsyncValue.error(error.message, StackTrace.current),
-    );
+    if (ref.mounted) {
+      state = result.when(
+        (data) => AsyncValue.data(data),
+        (error) => AsyncValue.error(error.message, StackTrace.current),
+      );
+    }
   }
 }

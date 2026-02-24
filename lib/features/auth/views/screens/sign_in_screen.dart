@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chat_application_task/core/constants/dimens.dart';
 import 'package:chat_application_task/core/style/text_styles.dart';
 import 'package:chat_application_task/features/auth/views/provider/sign_in_provider.dart';
@@ -8,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class SignInScreen extends ConsumerStatefulWidget {
   const SignInScreen({super.key});
@@ -28,12 +31,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     _passwordController = TextEditingController();
 
     ref.listenManual(signInProvider, (previous, next) {
+      log("Sign-in provider state changed: $next");
       switch (next) {
         case AsyncData(:final value) when value != null:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const ChatScreen()),
-          );
+          context.go('/chat');
         case AsyncError(:final error):
           ScaffoldMessenger.of(
             context,
@@ -128,13 +129,11 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text("Don't have an account? "),
+
         TextButton(
           onPressed: () {
             // Navigate to sign up screen
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const SignUpScreen()),
-            );
+            context.go('/sign_up');
           },
           child: const Text('Sign Up'),
         ),
@@ -159,7 +158,14 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 14),
         ),
-        child: const Text('Sign In', style: TextStyle(fontSize: 16)),
+        child: ref
+            .watch(signInProvider)
+            .when(
+              data: (value) =>
+                  const Text('Sign In', style: TextStyle(fontSize: 16)),
+              loading: () => const CircularProgressIndicator(),
+              error: (error, stackTrace) => const Text('Error'),
+            ),
       ),
     );
   }

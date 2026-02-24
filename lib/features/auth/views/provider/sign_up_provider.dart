@@ -25,9 +25,11 @@ class SignUp extends _$SignUp {
           SignUpRequestEntity(name: name, password: password, email: email),
         );
 
-    state = result.when(
-      (data) => AsyncValue.data(data),
-      (error) => AsyncValue.error(error.message, StackTrace.current),
-    );
+    if (ref.mounted) {
+      state = result.when(
+        (data) => AsyncValue.data(data),
+        (error) => AsyncValue.error(error.message, StackTrace.current),
+      );
+    }
   }
 }

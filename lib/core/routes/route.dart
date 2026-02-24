@@ -21,7 +21,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
     initialLocation: '/',
     refreshListenable: notifier,
     redirect: (context, state) {
-      final auth = ref.watch(authStateProvider);
+      final auth = ref.read(authStateProvider);
       final user = auth.value;
       final isLoading = auth.isLoading;
       final hasError = auth.hasError;

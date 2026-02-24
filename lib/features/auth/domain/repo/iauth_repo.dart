@@ -5,7 +5,12 @@ import 'package:chat_application_task/features/auth/domain/entities/user_entity.
 import 'package:multiple_result/multiple_result.dart';
 
 abstract interface class IAuthRepo {
-  Future<Result<SignInResponseEntity, Failure>> signIn(SignInRequestEntity signInEntity);
-  Future<Result<SignUpResponseEntity, Failure>> signUp(SignUpRequestEntity signUpEntity);
+  Future<Result<SignInResponseEntity, Failure>> signIn(
+    SignInRequestEntity signInEntity,
+  );
+  Future<Result<SignUpResponseEntity, Failure>> signUp(
+    SignUpRequestEntity signUpEntity,
+  );
+  Future<Result<void, Failure>> signOut();
   Stream<UserEntity?> authStateChanges();
 }

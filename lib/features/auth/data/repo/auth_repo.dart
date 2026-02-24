@@ -55,6 +55,18 @@ class AuthRepo implements IAuthRepo {
   }
 
   @override
+  Future<Result<void, Failure>> signOut() async {
+    try {
+      await remoteDataSource.signOut();
+      return const Success(null);
+    } on Exception catch (e) {
+      return Error(Failure.mapExceptionToFailure(e));
+    } catch (e) {
+      return const Error(Failure(message: 'An unexpected error occurred'));
+    }
+  }
+
+  @override
   Stream<UserEntity?> authStateChanges() {
     return remoteDataSource.authStateChanges();
   }

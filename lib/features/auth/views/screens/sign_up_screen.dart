@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
@@ -32,10 +33,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     ref.listenManual(signUpProvider, (previous, next) {
       switch (next) {
         case AsyncData(:final value) when value != null:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const ChatScreen()),
-          );
+          context.go('/chat');
         case AsyncError(:final error):
           ScaffoldMessenger.of(
             context,
@@ -146,10 +144,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         TextButton(
           onPressed: () {
             // Navigate to sign in screen
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const SignInScreen()),
-            );
+            context.go('/sign_in');
           },
           child: const Text('Sign In'),
         ),
