@@ -1,9 +1,8 @@
+import 'package:chat_application_task/core/constants/app_strings.dart';
 import 'package:chat_application_task/core/constants/dimens.dart';
 import 'package:chat_application_task/core/style/text_styles.dart';
 import 'package:chat_application_task/features/auth/views/provider/sign_up_provider.dart';
-import 'package:chat_application_task/features/auth/views/screens/sign_in_screen.dart';
 import 'package:chat_application_task/features/auth/views/widgets/app_textfield.dart';
-import 'package:chat_application_task/features/chat/views/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_validator/form_validator.dart';
@@ -33,7 +32,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     ref.listenManual(signUpProvider, (previous, next) {
       switch (next) {
         case AsyncData(:final value) when value != null:
-          context.go('/chat');
+          context.go('/chat_users');
         case AsyncError(:final error):
           ScaffoldMessenger.of(
             context,
@@ -69,7 +68,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   children: [
                     const FlutterLogo(size: 100),
                     const Gap(40),
-                    const Text('Create Account', style: AppTextStyles.heading2),
+                    const Text(
+                      AppStrings.createAccount,
+                      style: AppTextStyles.heading2,
+                    ),
                     const Gap(30),
                     nameField(),
                     const Gap(10),
@@ -95,10 +97,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Text("Email Address", style: AppTextStyles.labelLarge),
+        const Text(AppStrings.emailAddress, style: AppTextStyles.labelLarge),
         AppTextField(
           controller: _emailController,
-          hintText: 'Enter your email',
+          hintText: AppStrings.enterYourEmail,
           validator: ValidationBuilder().email().build(),
         ),
       ],
@@ -110,10 +112,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Text("Full Name", style: AppTextStyles.labelLarge),
+        const Text(AppStrings.fullName, style: AppTextStyles.labelLarge),
         AppTextField(
           controller: _nameController,
-          hintText: 'Enter your full name',
+          hintText: AppStrings.enterYourFullName,
           validator: ValidationBuilder().minLength(2).build(),
         ),
       ],
@@ -125,10 +127,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Text("Password", style: AppTextStyles.labelLarge),
+        const Text(AppStrings.password, style: AppTextStyles.labelLarge),
         AppTextField(
           controller: _passwordController,
-          hintText: 'Enter your password',
+          hintText: AppStrings.enterYourPassword,
           isPassword: true,
           validator: ValidationBuilder().minLength(6).build(),
         ),
@@ -140,13 +142,13 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text("Already have an account? "),
+        const Text(AppStrings.alreadyHaveAccountPrompt),
         TextButton(
           onPressed: () {
             // Navigate to sign in screen
             context.go('/sign_in');
           },
-          child: const Text('Sign In'),
+          child: const Text(AppStrings.signIn),
         ),
       ],
     );
@@ -170,7 +172,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 14),
         ),
-        child: const Text('Sign Up', style: TextStyle(fontSize: 16)),
+        child: const Text(AppStrings.signUp, style: TextStyle(fontSize: 16)),
       ),
     );
   }

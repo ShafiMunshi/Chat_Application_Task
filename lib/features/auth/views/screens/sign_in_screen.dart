@@ -1,11 +1,10 @@
 import 'dart:developer';
 
+import 'package:chat_application_task/core/constants/app_strings.dart';
 import 'package:chat_application_task/core/constants/dimens.dart';
 import 'package:chat_application_task/core/style/text_styles.dart';
 import 'package:chat_application_task/features/auth/views/provider/sign_in_provider.dart';
-import 'package:chat_application_task/features/auth/views/screens/sign_up_screen.dart';
 import 'package:chat_application_task/features/auth/views/widgets/app_textfield.dart';
-import 'package:chat_application_task/features/chat/views/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_validator/form_validator.dart';
@@ -34,7 +33,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       log("Sign-in provider state changed: $next");
       switch (next) {
         case AsyncData(:final value) when value != null:
-          context.go('/chat');
+          context.go('/chat_users');
         case AsyncError(:final error):
           ScaffoldMessenger.of(
             context,
@@ -69,7 +68,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                     const FlutterLogo(size: 100),
                     const Gap(40),
                     const Text(
-                      'Welcome Back',
+                      AppStrings.welcomeBack,
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -98,10 +97,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Text("Email Address", style: AppTextStyles.labelLarge),
+        const Text(AppStrings.emailAddress, style: AppTextStyles.labelLarge),
         AppTextField(
           controller: _emailController,
-          hintText: 'Enter your email',
+          hintText: AppStrings.enterYourEmail,
           validator: ValidationBuilder().email().build(),
         ),
       ],
@@ -113,10 +112,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Text("Password", style: AppTextStyles.labelLarge),
+        const Text(AppStrings.password, style: AppTextStyles.labelLarge),
         AppTextField(
           controller: _passwordController,
-          hintText: 'Enter your password',
+          hintText: AppStrings.enterYourPassword,
           isPassword: true,
           validator: ValidationBuilder().minLength(6).build(),
         ),
@@ -128,14 +127,14 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text("Don't have an account? "),
+        const Text(AppStrings.noAccountPrompt),
 
         TextButton(
           onPressed: () {
             // Navigate to sign up screen
             context.go('/sign_up');
           },
-          child: const Text('Sign Up'),
+          child: const Text(AppStrings.signUp),
         ),
       ],
     );
@@ -162,9 +161,9 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
             .watch(signInProvider)
             .when(
               data: (value) =>
-                  const Text('Sign In', style: TextStyle(fontSize: 16)),
+                  const Text(AppStrings.signIn, style: TextStyle(fontSize: 16)),
               loading: () => const CircularProgressIndicator(),
-              error: (error, stackTrace) => const Text('Error'),
+              error: (error, stackTrace) => const Text(AppStrings.error),
             ),
       ),
     );

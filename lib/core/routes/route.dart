@@ -4,10 +4,13 @@ import 'package:chat_application_task/core/splash/splash_screen.dart';
 import 'package:chat_application_task/features/auth/views/provider/auth_provider.dart';
 import 'package:chat_application_task/features/auth/views/screens/sign_in_screen.dart';
 import 'package:chat_application_task/features/auth/views/screens/sign_up_screen.dart';
-import 'package:chat_application_task/features/chat/views/chat_screen.dart';
+import 'package:chat_application_task/features/chat/views/indiv_chat_screen.dart';
+import 'package:chat_application_task/features/chat/views/chat_users_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../features/chat/views/widgets/chat_app_bar.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   final notifier = _AuthNotifier();
@@ -42,7 +45,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
 
       // Authenticated - leave sign-in/sign-up/splash
       if (goingToSignIn || goingToSignUp || state.matchedLocation == '/') {
-        return '/chat';
+        return '/chat_users';
       }
 
       return null;
@@ -51,7 +54,19 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/', builder: (_, __) => const SplashScreen()),
       GoRoute(path: '/sign_in', builder: (_, __) => const SignInScreen()),
       GoRoute(path: '/sign_up', builder: (_, __) => const SignUpScreen()),
-      GoRoute(path: '/chat', builder: (_, __) => const ChatScreen()),
+      GoRoute(
+        path: '/chat',
+        builder: (_, __) => IndivChatScreen(
+          messages: kMockMessages,
+          userName: 'John Doe',
+          onSend: (value) {},
+          onMicTap: () {},
+        ),
+      ),
+      GoRoute(
+        path: '/chat_users',
+        builder: (_, __) => const ChatUsersScreen(),
+      ),
     ],
   );
 });
