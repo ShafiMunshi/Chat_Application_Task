@@ -1,12 +1,12 @@
 import 'dart:developer';
 
 import 'package:chat_application_task/core/splash/splash_screen.dart';
+import 'package:chat_application_task/features/auth/domain/entities/user_entity.dart';
 import 'package:chat_application_task/features/auth/views/provider/auth_provider.dart';
 import 'package:chat_application_task/features/auth/views/screens/sign_in_screen.dart';
 import 'package:chat_application_task/features/auth/views/screens/sign_up_screen.dart';
 import 'package:chat_application_task/features/chat/views/chat_users_screen.dart';
 import 'package:chat_application_task/features/chat/views/indiv_chat_screen.dart';
-import 'package:chat_application_task/features/chat/views/widgets/ui_message.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -55,17 +55,15 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/sign_up', builder: (_, __) => const SignUpScreen()),
       GoRoute(
         path: '/chat',
-        builder: (_, __) => IndivChatScreen(
-          messages: kMockMessages,
-          userName: 'John Doe',
-          onSend: (value) {},
-          onMicTap: () {},
-        ),
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>?;
+          return IndivChatScreen(
+            otherUser: extra?['otherUser'] as UserEntity,
+            chatId: extra?['chatId'] as String? ?? '',
+          );
+        },
       ),
-      GoRoute(
-        path: '/chat_users',
-        builder: (_, __) => const ChatUsersScreen(),
-      ),
+      GoRoute(path: '/chat_users', builder: (_, __) => const ChatUsersScreen()),
     ],
   );
 });

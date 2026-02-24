@@ -14,7 +14,7 @@ class SendMessageUsecase {
   final IChatRepo repository;
   SendMessageUsecase(this.repository);
 
-  Future<void> call(MessageEntity message) {
-    return repository.sendMessage(message);
+  Future<void> call(MessageEntity message) async {
+    return await repository.sendMessage(message);
   }
 }

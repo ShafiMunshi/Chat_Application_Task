@@ -1,50 +1,41 @@
 import 'package:chat_application_task/core/constants/app_colors.dart';
 import 'package:chat_application_task/core/constants/app_strings.dart';
+import 'package:chat_application_task/core/shared/providers.dart';
+import 'package:chat_application_task/features/auth/domain/entities/user_entity.dart';
+import 'package:chat_application_task/features/chat/domain/entities/message_entity.dart';
+import 'package:chat_application_task/features/chat/domain/usecases/usecases.dart';
+import 'package:chat_application_task/features/chat/views/providers/chat_provider.dart';
 import 'package:chat_application_task/features/chat/views/widgets/chat_app_bar.dart';
 import 'package:chat_application_task/features/chat/views/widgets/chat_bubble.dart';
 import 'package:chat_application_task/features/chat/views/widgets/message_input.dart';
 import 'package:chat_application_task/features/chat/views/widgets/ui_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:uuid/uuid.dart';
 
-class IndivChatScreen extends StatefulWidget {
-  final List<UiMessage> messages;
-  final String userName;
-  final String? avatarUrl;
-  final bool isOnline;
-  final bool isListening;
-  final bool hasInternet;
-
-  final ValueChanged<String> onSend;
-  final VoidCallback onMicTap;
-  final VoidCallback? onBackTap;
-  final VoidCallback? onAvatarTap;
-  final VoidCallback? onMoreTap;
+class IndivChatScreen extends ConsumerStatefulWidget {
+  final UserEntity otherUser;
+  final String chatId;
 
   const IndivChatScreen({
     super.key,
-    required this.messages,
-    required this.userName,
-    required this.onSend,
-    required this.onMicTap,
-    this.avatarUrl,
-    this.isOnline = false,
-    this.isListening = false,
-    this.hasInternet = true,
-    this.onBackTap,
-    this.onAvatarTap,
-    this.onMoreTap,
+    required this.otherUser,
+    required this.chatId,
   });
 
   @override
-  State<IndivChatScreen> createState() => _IndivChatScreenState();
+  ConsumerState<IndivChatScreen> createState() => _IndivChatScreenState();
 }
 
-class _IndivChatScreenState extends State<IndivChatScreen>
+class _IndivChatScreenState extends ConsumerState<IndivChatScreen>
     with WidgetsBindingObserver {
   late final TextEditingController _inputController;
   late final ScrollController _scrollController;
+  final _uuid = const Uuid();
+  String get currentUserId =>
+      ref.watch(firebaseAuthProvider).currentUser?.uid ?? '';
 
   // Track keyboard visibility to re-scroll when keyboard appears
   double _previousBottomInset = 0;
@@ -59,31 +50,6 @@ class _IndivChatScreenState extends State<IndivChatScreen>
 
     // Scroll to bottom on first frame
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
-  }
-
-  @override
-  void didUpdateWidget(IndivChatScreen oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    // New message arrived → scroll to bottom
-    if (widget.messages.length != oldWidget.messages.length) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
-    }
-
-    // STT transcription result arrived → fill the input field
-    // (The parent should update the controller text externally)
-    // Alternatively, the parent can use a TextEditingController it owns and
-    // pass it down — here we just accept controller mutation from outside.
-
-    // Internet state changed
-    if (widget.hasInternet != oldWidget.hasInternet) {
-      if (!widget.hasInternet) {
-        // NoInternetDialog.show(context);
-      } else {
-        // NoInternetDialog.dismiss();
-        // ReconnectedSnackbar.show(context);
-      }
-    }
   }
 
   @override
@@ -113,6 +79,34 @@ class _IndivChatScreenState extends State<IndivChatScreen>
     super.dispose();
   }
 
+  Future<void> _sendMessage(String content) async {
+    if (content.trim().isEmpty) return;
+
+    final message = MessageEntity(
+      id: _uuid.v4(),
+      chatId: widget.chatId,
+      senderId: currentUserId,
+      receiverId: widget.otherUser.id,
+      content: content.trim(),
+      timestamp: DateTime.now(),
+      status: MessageStatus.sent,
+    );
+
+    try {
+      await ref.read(sendMessageUsecaseProvider).call(message);
+      WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to send: $e'),
+            backgroundColor: Colors.red.shade700,
+          ),
+        );
+      }
+    }
+  }
+
   void _scrollToBottom({bool animate = true}) {
     if (!_scrollController.hasClients) return;
     final max = _scrollController.position.maxScrollExtent;
@@ -127,14 +121,23 @@ class _IndivChatScreenState extends State<IndivChatScreen>
     }
   }
 
-  void _handleSend(String text) {
-    widget.onSend(text);
-    // Optimistic scroll
-    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
-  }
+  // void _handleSend(String text) {
+  //   widget.onSend(text);
+  //   // Optimistic scroll
+  //   WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+  // }
 
   @override
   Widget build(BuildContext context) {
+    final messagesAsync = ref.watch(chatMessagesStreamProvider(widget.chatId));
+
+    // Scroll to bottom when new messages arrive
+    ref.listen(chatMessagesStreamProvider(widget.chatId), (_, next) {
+      next.whenData((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+      });
+    });
+
     // Determine if we are on a tablet
     final isTablet = 1.sw > 600;
 
@@ -145,36 +148,47 @@ class _IndivChatScreenState extends State<IndivChatScreen>
       child: Scaffold(
         backgroundColor: AppColors.background,
         appBar: ChatAppBar(
-          userName: widget.userName,
-          avatarUrl: widget.avatarUrl,
-          isOnline: widget.isOnline,
-          onBackTap: widget.onBackTap,
-          onAvatarTap: widget.onAvatarTap,
-          onMoreTap: widget.onMoreTap,
+          userName: widget.otherUser.name,
+          avatarUrl: widget.otherUser.profilePictureUrl,
         ),
         body: Column(
           children: [
             // ── Offline Banner (inline top strip) ───────────────────────
-            _OfflineBanner(visible: !widget.hasInternet),
+            // _OfflineBanner(visible: !widget.hasInternet),
 
             // ── Message List ─────────────────────────────────────────────
             Expanded(
-              child: _MessageList(
-                messages: widget.messages,
-                scrollController: _scrollController,
-                isTablet: isTablet,
+              child: messagesAsync.when(
+                data: (messages) => _MessageList(
+                  messages: messages
+                      .map(
+                        (e) => UiMessage(
+                          id: e.id,
+                          text: e.content,
+                          isMe: e.senderId == currentUserId,
+                          timestamp: e.timestamp,
+                          status: e.status,
+                        ),
+                      )
+                      .toList(),
+                  scrollController: _scrollController,
+                  isTablet: isTablet,
+                ),
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stackTrace) =>
+                    Center(child: Text('Error loading messages: $error')),
               ),
             ),
 
             // ── STT Listening Banner ─────────────────────────────────────
-            SttListeningBanner(isVisible: widget.isListening),
+            // SttListeningBanner(isVisible: widget.isListening),
 
             // ── Input Bar ────────────────────────────────────────────────
             MessageInputBar(
               controller: _inputController,
-              isListening: widget.isListening,
-              onSend: _handleSend,
-              onMicTap: widget.onMicTap,
+              isListening: false,
+              onSend: _sendMessage,
+              onMicTap: () => print('Mic tapped'),
             ),
           ],
         ),
@@ -251,7 +265,7 @@ class _MessageList extends StatelessWidget {
       itemBuilder: (_, i) {
         final cfg = configs[i];
         return ChatBubble(
-          message: kMockMessages[i],
+          message: cfg.message, 
           showDateDivider: cfg.showDateDivider,
           showAvatar: cfg.showAvatar,
           isLastInGroup: cfg.isLastInGroup,
@@ -341,75 +355,6 @@ class _EmptyState extends StatelessWidget {
           Text(
             AppStrings.startConversation,
             style: TextStyle(fontSize: 13.sp, color: AppColors.textMuted),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ── Preview / Storybook entry point ──────────────────────────────────────────
-// Use this to run the chat screen in isolation without any backend.
-
-class ChatScreenPreview extends StatefulWidget {
-  const ChatScreenPreview({super.key});
-
-  @override
-  State<ChatScreenPreview> createState() => _ChatScreenPreviewState();
-}
-
-class _ChatScreenPreviewState extends State<ChatScreenPreview> {
-  List<UiMessage> _messages = List.from(kMockMessages);
-  bool _isListening = false;
-  bool _hasInternet = true;
-
-  void _handleSend(String text) {
-    setState(() {
-      _messages = [
-        ..._messages,
-        UiMessage(
-          id: DateTime.now().toIso8601String(),
-          text: text,
-          isMe: true,
-          timestamp: DateTime.now(),
-          status: MessageStatus.sent,
-        ),
-      ];
-    });
-  }
-
-  void _toggleMic() => setState(() => _isListening = !_isListening);
-
-  void _toggleInternet() => setState(() => _hasInternet = !_hasInternet);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          IndivChatScreen(
-            messages: _messages,
-            userName: 'Alice Chen',
-            isOnline: true,
-            isListening: _isListening,
-            hasInternet: _hasInternet,
-            onSend: _handleSend,
-            onMicTap: _toggleMic,
-          ),
-          // Dev-only toggle buttons
-          Positioned(
-            bottom: 120,
-            right: 16,
-            child: Column(
-              children: [
-                FloatingActionButton.small(
-                  heroTag: 'net',
-                  backgroundColor: _hasInternet ? Colors.green : Colors.red,
-                  onPressed: _toggleInternet,
-                  child: Icon(_hasInternet ? Icons.wifi : Icons.wifi_off),
-                ),
-              ],
-            ),
           ),
         ],
       ),

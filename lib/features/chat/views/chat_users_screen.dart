@@ -1,5 +1,7 @@
 import 'package:chat_application_task/core/constants/app_colors.dart';
 import 'package:chat_application_task/core/constants/app_strings.dart';
+import 'package:chat_application_task/features/auth/views/provider/auth_provider.dart';
+import 'package:chat_application_task/features/auth/views/provider/sign_in_provider.dart';
 import 'package:chat_application_task/features/chat/views/providers/all_chat_users_provider.dart';
 import 'package:chat_application_task/features/chat/views/widgets/user_avatar.dart';
 import 'package:chat_application_task/features/chat/views/widgets/user_list_item.dart';
@@ -8,15 +10,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class ChatUsersScreen extends StatefulWidget {
+class ChatUsersScreen extends ConsumerStatefulWidget {
   const ChatUsersScreen({super.key});
 
   @override
-  State<ChatUsersScreen> createState() => _ChatUsersScreenState();
+  ConsumerState<ChatUsersScreen> createState() => _ChatUsersScreenState();
 }
 
-class _ChatUsersScreenState extends State<ChatUsersScreen> {
+class _ChatUsersScreenState extends ConsumerState<ChatUsersScreen> {
   late TextEditingController _searchController;
+  String get currentUserId => ref.read(authStateProvider).value?.id ?? '';
 
   @override
   void initState() {
@@ -64,17 +67,27 @@ class AllChatUsersDisplay extends ConsumerWidget {
           .watch(allUserStreamProvider)
           .when(
             data: (users) => ListView.builder(
-              itemCount: users.length,
+              itemCount: users.length - 1,
               itemBuilder: (context, index) {
-                final user = users[index];
+                final chatUser = users[index];
+                // if (chatUser.id == ref.read(authStateProvider).value?.id) {
+                //   return const SizedBox.shrink();
+                // }
+
                 return UserListItem(
-                  name: user.name,
+                  name: chatUser.name,
                   lastMessage: AppStrings.lastMessagePreview,
-                  avatarLabel: user.profilePictureUrl?.isNotEmpty ?? false
-                      ? user.profilePictureUrl![0]
-                      : user.name[0],
+                  avatarLabel: chatUser.profilePictureUrl?.isNotEmpty ?? false
+                      ? chatUser.profilePictureUrl![0]
+                      : chatUser.name[0],
                   timestamp: '${index + 1}:0${index}m',
-                  onTap: () => context.push('/chat'),
+                  onTap: () {
+                    final extraData = {
+                      'otherUser': chatUser,
+                      'chatId': chatUser.id,
+                    };
+                    context.push('/chat', extra: extraData);
+                  },
                 );
               },
             ),

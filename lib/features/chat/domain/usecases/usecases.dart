@@ -20,6 +20,6 @@ final getChatMessagesUsecaseProvider = Provider<GetChatMessagesUsecase>((ref) {
 });
 
 final sendMessageUsecaseProvider = Provider<SendMessageUsecase>((ref) {
-  final chatRepo = ref.watch(chatRepoProvider);
+  final chatRepo = ref.read(chatRepoProvider);
   return SendMessageUsecase(chatRepo);
 });

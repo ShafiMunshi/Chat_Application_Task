@@ -38,4 +38,10 @@ class AppStrings {
   // ── Date Labels ───────────────────────────────────────────────────────────
   static const String today = 'Today';
   static const String yesterday = 'Yesterday';
+
+  // ── Errors ───────────────────────────────────────────────────────────────
+
+
+  // Drawers 
+  static const String logout = 'Log Out';
 }

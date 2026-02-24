@@ -7,11 +7,3 @@ final chatMessagesStreamProvider =
       return ref.watch(getChatMessagesUsecaseProvider).getMessages(chatId);
     });
 
-
-final sentChatMessageProvider = Provider.family<void, MessageEntity>((
-  ref,
-  message,
-) {
-  final sendMessageUsecase = ref.watch(sendMessageUsecaseProvider);
-  sendMessageUsecase(message);
-});

@@ -6,19 +6,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String userName;
   final String? avatarUrl;
-  final bool isOnline;
-  final VoidCallback? onBackTap;
-  final VoidCallback? onAvatarTap;
-  final VoidCallback? onMoreTap;
 
   const ChatAppBar({
     super.key,
     required this.userName,
     this.avatarUrl,
-    this.isOnline = false,
-    this.onBackTap,
-    this.onAvatarTap,
-    this.onMoreTap,
+
   });
 
   @override
@@ -40,14 +33,14 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
             // Back Button
             _AppBarIconButton(
               icon: Icons.arrow_back_ios_new_rounded,
-              onTap: onBackTap ?? () => Navigator.of(context).maybePop(),
+              onTap: () => Navigator.of(context).maybePop(),
             ),
 
             SizedBox(width: 4.w),
 
             // Avatar with online indicator
             GestureDetector(
-              onTap: onAvatarTap,
+              onTap: () => print('Avatar tapped'),
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
@@ -77,24 +70,24 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
                         : _AvatarPlaceholder(name: userName),
                   ),
 
-                  // Online dot
-                  if (isOnline)
-                    Positioned(
-                      right: 0,
-                      bottom: 0,
-                      child: Container(
-                        width: 11.r,
-                        height: 11.r,
-                        decoration: BoxDecoration(
-                          color: AppColors.online,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: AppColors.surface,
-                            width: 2,
-                          ),
-                        ),
-                      ),
-                    ),
+                  // // Online dot
+                  // if (isOnline)
+                  //   Positioned(
+                  //     right: 0,
+                  //     bottom: 0,
+                  //     child: Container(
+                  //       width: 11.r,
+                  //       height: 11.r,
+                  //       decoration: BoxDecoration(
+                  //         color: AppColors.online,
+                  //         shape: BoxShape.circle,
+                  //         border: Border.all(
+                  //           color: AppColors.surface,
+                  //           width: 2,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
                 ],
               ),
             ),
@@ -119,13 +112,11 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   SizedBox(height: 2.h),
-                  _OnlineStatusText(isOnline: isOnline),
+                  // _OnlineStatusText(isOnline: isOnline),
                 ],
               ),
             ),
 
-            // More options
-            _AppBarIconButton(icon: Icons.more_vert_rounded, onTap: onMoreTap),
           ],
         ),
       ),
