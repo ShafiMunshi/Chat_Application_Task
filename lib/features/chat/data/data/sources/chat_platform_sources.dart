@@ -20,8 +20,9 @@ class ChatPlatformSources implements IChatPlatformSource {
   static const MethodChannel _channel = MethodChannel(
     'com.example.chat/channel',
   );
-  static const EventChannel _messagesChannel = EventChannel(
-    'com.example.chat/messages',
+  
+   static const EventChannel _localMessagesChannel = EventChannel(
+    'com.example.chat/local_messages',
   );
 
   @override
@@ -48,7 +49,7 @@ class ChatPlatformSources implements IChatPlatformSource {
 
   @override
   Stream<List<MessageModel>> getMessages(String chatId) {
-    return _messagesChannel.receiveBroadcastStream({'chatId': chatId}).map((
+    return _localMessagesChannel.receiveBroadcastStream({'chatId': chatId}).map((
       event,
     ) {
       final list = event as List<dynamic>;

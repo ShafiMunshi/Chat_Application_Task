@@ -18,12 +18,12 @@ class ConnectivityService(context: Context) {
         get() {
             val net = connectivityManager.activeNetwork ?: return false
             val caps = connectivityManager.getNetworkCapabilities(net) ?: return false
-            return caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            return caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
         }
 
     fun register() {
         val request = NetworkRequest.Builder()
-            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            .addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)  // was INTERNET
             .build()
 
         connectivityManager.registerNetworkCallback(request,

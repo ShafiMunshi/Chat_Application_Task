@@ -2,6 +2,7 @@ package com.example.chat_application_task
 
 import com.example.chat_application_task.channel.ChatEventChannelHandler
 import com.example.chat_application_task.channel.ChatMethodChannelHandler
+import com.example.chat_application_task.channel.LocalEventChannelHandler
 import com.example.chat_application_task.service.ChatService
 import com.example.chat_application_task.service.ConnectivityService
 import com.example.chat_application_task.service.LocalService
@@ -15,6 +16,7 @@ class MainActivity : FlutterActivity() {
 
     private lateinit var methodChannel: MethodChannel
     private lateinit var eventChannel: EventChannel
+    private lateinit var localEventChannel: EventChannel
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -36,11 +38,18 @@ class MainActivity : FlutterActivity() {
             ChatEventChannelHandler.CHANNEL_NAME,
         )
         eventChannel.setStreamHandler(ChatEventChannelHandler(chatService))
+
+        localEventChannel = EventChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            LocalEventChannelHandler.CHANNEL_NAME,
+        ).also { it.setStreamHandler(LocalEventChannelHandler(syncManager)) }
+
     }
 
     override fun cleanUpFlutterEngine(flutterEngine: FlutterEngine) {
         super.cleanUpFlutterEngine(flutterEngine)
         methodChannel.setMethodCallHandler(null)
         eventChannel.setStreamHandler(null)
+        localEventChannel.setStreamHandler(null)
     }
 }
