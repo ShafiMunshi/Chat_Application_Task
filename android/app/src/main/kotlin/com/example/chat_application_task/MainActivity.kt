@@ -1,16 +1,19 @@
 package com.example.chat_application_task
 
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.chat_application_task.channel.ChatMethodChannelHandler
+import com.example.chat_application_task.firestore.FirestoreService
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
-
-    private lateinit var firestore: FirebaseFirestore
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
-        firestore = FirebaseFirestore.getInstance()
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            ChatMethodChannelHandler.CHANNEL_NAME,
+        ).setMethodCallHandler(ChatMethodChannelHandler(FirestoreService()))
     }
 }
