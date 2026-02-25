@@ -10,6 +10,7 @@ class AllChatUsersDisplay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currentUserID = ref.watch(authStateProvider).value?.id;
     return Expanded(
       child: ref
           .watch(allUserStreamProvider)
@@ -19,7 +20,7 @@ class AllChatUsersDisplay extends ConsumerWidget {
               itemBuilder: (context, index) {
                 final chatUser = users[index];
 
-                if (chatUser.id == ref.watch(authStateProvider).value?.id) {
+                if (chatUser.id == currentUserID) {
                   return const SizedBox.shrink();
                 }
 
@@ -31,9 +32,12 @@ class AllChatUsersDisplay extends ConsumerWidget {
                       : chatUser.name[0],
                   timestamp: '${index + 1}:0${index}m',
                   onTap: () {
+                    final ids = [chatUser.id, currentUserID];
+                    ids.sort();
+                    final chatRoomId = ids.join('-');
                     final extraData = {
                       'otherUser': chatUser,
-                      'chatId': chatUser.id,
+                      'chatId': chatRoomId,
                     };
                     context.push('/chat', extra: extraData);
                   },

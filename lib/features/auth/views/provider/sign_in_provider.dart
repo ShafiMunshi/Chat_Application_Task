@@ -24,6 +24,7 @@ class SignIn extends _$SignIn {
         .call(SignInRequestEntity(email: email, password: password));
 
     if (ref.mounted) {
+      ref.read(authStateProvider);
       state = result.when(
         (data) => AsyncValue.data(data),
         (error) => AsyncValue.error(error.message, StackTrace.current),

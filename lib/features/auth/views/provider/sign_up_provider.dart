@@ -1,5 +1,6 @@
 import 'package:chat_application_task/features/auth/domain/entities/sign_up_entity.dart';
 import 'package:chat_application_task/features/auth/domain/usecases/usecases.dart';
+import 'package:chat_application_task/features/auth/views/provider/auth_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'sign_up_provider.g.dart';
@@ -26,6 +27,7 @@ class SignUp extends _$SignUp {
         );
 
     if (ref.mounted) {
+       ref.read(authStateProvider);
       state = result.when(
         (data) => AsyncValue.data(data),
         (error) => AsyncValue.error(error.message, StackTrace.current),

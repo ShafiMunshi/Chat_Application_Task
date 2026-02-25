@@ -89,8 +89,6 @@ class AuthRemoteSource implements IAuthRemoteSource {
           refreshToken: user.refreshToken ?? '',
           profilePictureUrl: user.photoURL,
         );
-        await user.updateDisplayName(name);
-        // create in users collection with name and email and uid as id
         await firebaseFirestore
             .collection('USERS')
             .doc(userModel.uid)
@@ -114,15 +112,14 @@ class AuthRemoteSource implements IAuthRemoteSource {
 
   @override
   Stream<UserEntity?> authStateChanges() {
-    return firebaseAuth.authStateChanges().map((user) {
+    return firebaseAuth.authStateChanges().asyncMap((user) async {
       if (user == null) return null;
-
-      return UserEntity(
-        id: user.uid,
-        name: user.displayName ?? '',
-        email: user.email ?? '',
-        profilePictureUrl: user.photoURL,
-      );
+      final doc = await firebaseFirestore
+          .collection('USERS')
+          .doc(user.uid)
+          .get();
+      if (!doc.exists || doc.data() == null) return null;
+      return UserModel.fromJson(doc.data()!).toUserEntity();
     });
   }
 }

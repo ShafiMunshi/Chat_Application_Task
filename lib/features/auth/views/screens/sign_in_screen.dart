@@ -28,21 +28,6 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
-
-    ref.listenManual(signInProvider, (previous, next) {
-      log("Sign-in provider state changed: $next");
-      switch (next) {
-        case AsyncData(:final value) when value != null:
-          context.go('/chat_users');
-        case AsyncError(:final error):
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(error.toString())));
-
-        default:
-        // Do nothing
-      }
-    });
   }
 
   @override

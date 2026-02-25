@@ -28,20 +28,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     _nameController = TextEditingController();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
-
-    ref.listenManual(signUpProvider, (previous, next) {
-      switch (next) {
-        case AsyncData(:final value) when value != null:
-          context.go('/chat_users');
-        case AsyncError(:final error):
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(error.toString())));
-
-        default:
-        // Do nothing
-      }
-    });
   }
 
   @override
@@ -172,7 +158,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 14),
         ),
-        child: const Text(AppStrings.signUp, style: TextStyle(fontSize: 16)),
+        child: ref
+            .watch(signUpProvider)
+            .when(
+              data: (value) =>
+                  const Text(AppStrings.signUp, style: TextStyle(fontSize: 16)),
+              loading: () => const CircularProgressIndicator(),
+              error: (error, stackTrace) => const Text(AppStrings.error),
+            ),
       ),
     );
   }

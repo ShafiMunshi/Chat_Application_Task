@@ -18,7 +18,7 @@ class UserAvatar extends StatelessWidget {
       ),
       child: Center(
         child: Text(
-          label[0],
+          label[0].toUpperCase(),
           style: TextStyle(
             fontSize: size * 0.29,
             fontWeight: FontWeight.bold,

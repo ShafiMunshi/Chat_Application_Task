@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chat_application_task/core/constants/app_colors.dart';
 import 'package:chat_application_task/core/shared/widgets/custom_appbar.dart';
 import 'package:chat_application_task/features/auth/views/provider/auth_provider.dart';
@@ -34,7 +36,7 @@ class _ChatUsersScreenState extends ConsumerState<ChatUsersScreen> {
     final currentUser = ref.watch(authStateProvider).value;
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: CustomAppBar(user: currentUser!),
+      appBar: currentUser != null ? CustomAppBar(user: currentUser) : null,
       endDrawer: ChatDrawerWidget(ref: ref),
       body: Column(
         children: [
@@ -45,4 +47,3 @@ class _ChatUsersScreenState extends ConsumerState<ChatUsersScreen> {
     );
   }
 }
-
