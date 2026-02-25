@@ -44,6 +44,10 @@ class ChatRemoteSources implements IChatRemoteSource {
           .collection(messageCollection)
           .doc(message.id);
       await docRef.set(message.toMessageModel().toJson());
+      await _firestore.collection(chatsCollection).doc(message.chatId).set({
+        'lastMessage': message.content,
+        'timestamp': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
     } catch (e) {
       rethrow;
     }
