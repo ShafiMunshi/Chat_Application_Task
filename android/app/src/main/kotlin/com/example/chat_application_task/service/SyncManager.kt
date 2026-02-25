@@ -12,6 +12,10 @@ class SyncManager(
 ) {
     private val mainHandler = Handler(Looper.getMainLooper())
     init {
+        connectivityService.onConnected = {
+            Log.d("SyncManager", "Internet connected - flushing pending messages")
+            flushPendingMessages()
+        }
         connectivityService.register();
     }
 
@@ -58,5 +62,11 @@ class SyncManager(
                 mainHandler.post { onError(e) }
             },
         )
+    }
+
+    private fun flushPendingMessages() {
+        localService.getAllPendingMessages().forEach { msg ->
+            uploadToFirestore(msg, {}, {})
+        }
     }
 }
