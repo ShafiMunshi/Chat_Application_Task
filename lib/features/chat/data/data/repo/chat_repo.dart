@@ -1,5 +1,4 @@
 import 'package:chat_application_task/core/errors/failures.dart';
-import 'package:chat_application_task/core/network/internet_connection_checker.dart';
 import 'package:chat_application_task/features/chat/data/data/models/message_model.dart';
 import 'package:chat_application_task/features/chat/data/data/sources/chat_platform_sources.dart';
 import 'package:chat_application_task/features/chat/domain/entities/message_entity.dart';
@@ -9,9 +8,8 @@ import 'package:multiple_result/multiple_result.dart';
 
 class ChatRepo implements IChatRepo {
   final IChatPlatformSource _chatPlatformSource;
-  final INetConnectionChecker _netConnectionChecker;
 
-  ChatRepo(this._chatPlatformSource, this._netConnectionChecker);
+  ChatRepo(this._chatPlatformSource);
 
   @override
   Stream<List<MessageEntity>> getMessages(String chatId) {
