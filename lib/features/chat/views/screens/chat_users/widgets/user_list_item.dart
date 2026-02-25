@@ -1,6 +1,6 @@
 import 'package:chat_application_task/core/constants/app_colors.dart';
 import 'package:chat_application_task/core/style/text_styles.dart';
-import 'package:chat_application_task/features/chat/views/widgets/user_avatar.dart';
+import 'package:chat_application_task/core/shared/widgets/user_avatar.dart';
 import 'package:flutter/material.dart';
 
 class UserListItem extends StatelessWidget {

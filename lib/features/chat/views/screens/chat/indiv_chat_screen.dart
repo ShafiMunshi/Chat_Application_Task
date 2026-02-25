@@ -5,10 +5,10 @@ import 'package:chat_application_task/features/auth/domain/entities/user_entity.
 import 'package:chat_application_task/features/chat/domain/entities/message_entity.dart';
 import 'package:chat_application_task/features/chat/domain/usecases/usecases.dart';
 import 'package:chat_application_task/features/chat/views/providers/chat_provider.dart';
-import 'package:chat_application_task/features/chat/views/widgets/chat_app_bar.dart';
-import 'package:chat_application_task/features/chat/views/widgets/chat_bubble.dart';
-import 'package:chat_application_task/features/chat/views/widgets/message_input.dart';
-import 'package:chat_application_task/features/chat/views/widgets/ui_message.dart';
+import 'package:chat_application_task/features/chat/views/screens/chat/widgets/chat_app_bar.dart';
+import 'package:chat_application_task/features/chat/views/screens/chat/widgets/chat_bubble.dart';
+import 'package:chat_application_task/features/chat/views/screens/chat/widgets/message_input.dart';
+import 'package:chat_application_task/features/chat/views/screens/chat/widgets/ui_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

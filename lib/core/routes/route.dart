@@ -5,8 +5,8 @@ import 'package:chat_application_task/features/auth/domain/entities/user_entity.
 import 'package:chat_application_task/features/auth/views/provider/auth_provider.dart';
 import 'package:chat_application_task/features/auth/views/screens/sign_in_screen.dart';
 import 'package:chat_application_task/features/auth/views/screens/sign_up_screen.dart';
-import 'package:chat_application_task/features/chat/views/chat_users_screen.dart';
-import 'package:chat_application_task/features/chat/views/indiv_chat_screen.dart';
+import 'package:chat_application_task/features/chat/views/screens/chat_users/chat_users_screen.dart';
+import 'package:chat_application_task/features/chat/views/screens/chat/indiv_chat_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

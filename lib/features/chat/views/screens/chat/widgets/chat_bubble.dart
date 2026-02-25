@@ -1,7 +1,7 @@
 import 'package:chat_application_task/core/constants/app_colors.dart';
 import 'package:chat_application_task/core/constants/app_strings.dart';
 import 'package:chat_application_task/features/chat/domain/entities/message_entity.dart';
-import 'package:chat_application_task/features/chat/views/widgets/ui_message.dart';
+import 'package:chat_application_task/features/chat/views/screens/chat/widgets/ui_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

@@ -89,6 +89,7 @@ class AuthRemoteSource implements IAuthRemoteSource {
           refreshToken: user.refreshToken ?? '',
           profilePictureUrl: user.photoURL,
         );
+        await user.updateDisplayName(name);
         // create in users collection with name and email and uid as id
         await firebaseFirestore
             .collection('USERS')
@@ -115,6 +116,7 @@ class AuthRemoteSource implements IAuthRemoteSource {
   Stream<UserEntity?> authStateChanges() {
     return firebaseAuth.authStateChanges().map((user) {
       if (user == null) return null;
+
       return UserEntity(
         id: user.uid,
         name: user.displayName ?? '',
