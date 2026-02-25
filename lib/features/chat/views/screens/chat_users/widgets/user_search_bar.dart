@@ -3,9 +3,9 @@ import 'package:chat_application_task/core/constants/app_strings.dart';
 import 'package:flutter/material.dart';
 
 class UserSearchBar extends StatelessWidget {
-  final TextEditingController controller;
+  final Function(String)? onChanged;
 
-  const UserSearchBar({super.key, required this.controller});
+  const UserSearchBar({super.key, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class UserSearchBar extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         child: TextField(
-          controller: controller,
+          onChanged: onChanged,
           decoration: const InputDecoration(
             hintText: AppStrings.searchHint,
             hintStyle: TextStyle(color: AppColors.textMuted),

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:chat_application_task/core/constants/app_colors.dart';
 import 'package:chat_application_task/core/shared/widgets/custom_appbar.dart';
 import 'package:chat_application_task/features/auth/views/provider/auth_provider.dart';
+import 'package:chat_application_task/features/chat/views/providers/all_chat_users_provider.dart';
 import 'package:chat_application_task/features/chat/views/screens/chat_users/widgets/user_search_bar.dart';
 import 'package:chat_application_task/features/chat/views/screens/chat_users/widgets/all_chat_user.dart';
 import 'package:chat_application_task/features/chat/views/screens/chat_users/widgets/chat_drawer.dart';
@@ -40,7 +41,9 @@ class _ChatUsersScreenState extends ConsumerState<ChatUsersScreen> {
       endDrawer: ChatDrawerWidget(ref: ref),
       body: Column(
         children: [
-          UserSearchBar(controller: _searchController),
+          UserSearchBar(onChanged: (value) {
+            ref.read(userSearchProvider.notifier).update(value);
+          },),
           const AllChatUsersDisplay(),
         ],
       ),

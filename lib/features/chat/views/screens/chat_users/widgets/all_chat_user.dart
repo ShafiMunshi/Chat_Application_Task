@@ -11,11 +11,11 @@ class AllChatUsersDisplay extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentUserID = ref.watch(authStateProvider).value?.id;
+    final searchText = ref.watch(userSearchProvider);
+    final allStreamAsync = ref.watch(allUserStreamProvider(searchText));
     return Expanded(
-      child: ref
-          .watch(allUserStreamProvider)
-          .when(
-            data: (users) => ListView.builder(
+      child: allStreamAsync.when(
+        data: (users) => ListView.builder(
               itemCount: users.length,
               itemBuilder: (context, index) {
                 final chatUser = users[index];

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'sign_up_provider.dart';
+part of 'all_chat_users_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,51 +9,50 @@ part of 'sign_up_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(SignUp)
-final signUpProvider = SignUpProvider._();
+@ProviderFor(UserSearch)
+final userSearchProvider = UserSearchProvider._();
 
-final class SignUpProvider
-    extends $NotifierProvider<SignUp, AsyncValue<dynamic>> {
-  SignUpProvider._()
+final class UserSearchProvider extends $NotifierProvider<UserSearch, String> {
+  UserSearchProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'signUpProvider',
+        name: r'userSearchProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$signUpHash();
+  String debugGetCreateSourceHash() => _$userSearchHash();
 
   @$internal
   @override
-  SignUp create() => SignUp();
+  UserSearch create() => UserSearch();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(AsyncValue<dynamic> value) {
+  Override overrideWithValue(String value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<AsyncValue<dynamic>>(value),
+      providerOverride: $SyncValueProvider<String>(value),
     );
   }
 }
 
-String _$signUpHash() => r'd77670979e0dced071f2c67825ecc1e9cbd717c6';
+String _$userSearchHash() => r'1e2bcd7620cfdb68539ef77904c7708b721e851e';
 
-abstract class _$SignUp extends $Notifier<AsyncValue<dynamic>> {
-  AsyncValue<dynamic> build();
+abstract class _$UserSearch extends $Notifier<String> {
+  String build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final ref = this.ref as $Ref<AsyncValue<dynamic>, AsyncValue<dynamic>>;
+    final ref = this.ref as $Ref<String, String>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<dynamic>, AsyncValue<dynamic>>,
-              AsyncValue<dynamic>,
+              AnyNotifier<String, String>,
+              String,
               Object?,
               Object?
             >;
