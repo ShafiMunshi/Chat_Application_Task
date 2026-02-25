@@ -3,7 +3,7 @@ package com.example.chat_application_task.service
 import android.os.Handler
 import android.os.Looper
 import com.google.firebase.firestore.FirebaseFirestore
-
+import com.google.firebase.firestore.SetOptions
 
 class ChatService {
 
@@ -29,7 +29,7 @@ class ChatService {
                 )
                 db.collection(chatCollection)
                     .document(chatId)
-                    .update(chatUpdateData)
+                    .set(chatUpdateData, SetOptions.merge())
                     .addOnSuccessListener { mainThread { onSuccess() } }
                     .addOnFailureListener { e -> mainThread { onError(e) } }
             }
