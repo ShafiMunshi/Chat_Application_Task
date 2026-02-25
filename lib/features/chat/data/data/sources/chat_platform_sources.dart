@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:chat_application_task/core/logger/log.dart';
+import 'package:chat_application_task/features/chat/data/data/models/message_model.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,11 +13,15 @@ final chatPlatformSourceProvider = Provider<IChatPlatformSource>((ref) {
 
 abstract interface class IChatPlatformSource {
   Future<void> sendMessage(MessageEntity message);
+  Stream<List<MessageModel>> getMessages(String chatId);
 }
 
 class ChatPlatformSources implements IChatPlatformSource {
   static const MethodChannel _channel = MethodChannel(
     'com.example.chat/channel',
+  );
+  static const EventChannel _messagesChannel = EventChannel(
+    'com.example.chat/messages',
   );
 
   @override
@@ -39,5 +44,20 @@ class ChatPlatformSources implements IChatPlatformSource {
       Log.error('Error sending message: $e');
       rethrow;
     }
+  }
+
+  @override
+  Stream<List<MessageModel>> getMessages(String chatId) {
+    return _messagesChannel.receiveBroadcastStream({'chatId': chatId}).map((
+      event,
+    ) {
+      final list = event as List<dynamic>;
+      return list
+          .map(
+            (item) =>
+                MessageModel.fromJson(Map<String, dynamic>.from(item as Map)),
+          )
+          .toList();
+    });
   }
 }

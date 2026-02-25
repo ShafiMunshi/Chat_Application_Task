@@ -12,6 +12,7 @@ class ChatMethodChannelHandler(
 
     companion object {
         const val CHANNEL_NAME = "com.example.chat/channel"
+        const val MESSAGES_EVENT_CHANNEL = "com.example.chat/messages"
     }
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {

@@ -2,8 +2,8 @@ import 'package:chat_application_task/features/chat/domain/entities/message_enti
 import 'package:chat_application_task/features/chat/domain/usecases/usecases.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final chatMessagesStreamProvider =
-    StreamProvider.family<List<MessageEntity>, String>((ref, chatId) {
+
+final chatMessagesStreamProvider = StreamProvider.autoDispose
+    .family<List<MessageEntity>, String>((ref, chatId) {
       return ref.watch(getChatMessagesUsecaseProvider).getMessages(chatId);
     });
-
