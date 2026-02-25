@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:chat_application_task/core/errors/exceptions.dart';
+import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 part 'failures.freezed.dart';
 
@@ -26,6 +27,7 @@ abstract class Failure with _$Failure {
               'Unable to connect.'
               'Please check your internet connection and try again.',
         ),
+        PlatformException() => Failure(message: e.message ?? 'Platform error occurred'),
         _ => Failure(message: e.toString()),
       };
     }

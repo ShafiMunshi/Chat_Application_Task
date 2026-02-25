@@ -1,11 +1,13 @@
 package com.example.chat_application_task.channel
 
-import com.example.chat_application_task.firestore.FirestoreService
+import android.util.Log
+import com.example.chat_application_task.models.MessageModel
+import com.example.chat_application_task.service.ChatService
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
 class ChatMethodChannelHandler(
-    private val firestoreService: FirestoreService,
+    private val chatService: ChatService,
 ) : MethodChannel.MethodCallHandler {
 
     companion object {
@@ -13,47 +15,31 @@ class ChatMethodChannelHandler(
     }
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
+        Log.d("FlutterChannel", "Message received from Flutter - Method: ${call.method}, Arguments: ${call.arguments}")
         when (call.method) {
-            "saveData" -> handleSaveData(call, result)
-            "getData"  -> handleGetData(call, result)
+            "sendMessage" -> handleSendMessage(call, result)
             else       -> result.notImplemented()
         }
     }
 
-    private fun handleSaveData(call: MethodCall, result: MethodChannel.Result) {
-        val collection = call.argument<String>("collection")
-        val docId      = call.argument<String>("docId")
-        val data       = call.argument<Map<String, Any>>("data")
+    private fun handleSendMessage(call: MethodCall, result: MethodChannel.Result) {
 
-        if (collection == null || docId == null || data == null) {
-            result.error("INVALID_ARG", "collection, docId and data are required", null)
+        @Suppress("UNCHECKED_CAST")
+        val messageData = call.arguments as? Map<String, Any>
+        if (messageData == null || MessageModel.isAnyDataMissing(messageData)) {
+            result.error("INVALID_ARG", "Missing information of Message Data", null)
             return
         }
 
-        firestoreService.saveData(
-            collection = collection,
-            docId      = docId,
-            data       = data,
-            onSuccess  = { result.success(null) },
-            onError    = { e -> result.error("FIRESTORE_ERROR", e.message, null) },
-        )
-
-    }
-    
-    private fun handleGetData(call: MethodCall, result: MethodChannel.Result) {
-        val collection = call.argument<String>("collection")
-        val docId      = call.argument<String>("docId")
-
-        if (collection == null || docId == null) {
-            result.error("INVALID_ARG", "collection and docId are required", null)
-            return
-        }
-
-        firestoreService.getData(
-            collection = collection,
-            docId      = docId,
-            onSuccess  = { data -> result.success(data) },
-            onError    = { e -> result.error("FIRESTORE_ERROR", e.message, null) },
+        val message = MessageModel.fromMap(messageData)
+        val chatId = message.chatId
+        chatService.sendMessage(
+            chatId = chatId,
+            messageData = messageData,
+            onSuccess = { result.success(null) },
+            onError = { e -> result.error("FIRESTORE_ERROR", e.localizedMessage, null) }
         )
     }
+
+
 }

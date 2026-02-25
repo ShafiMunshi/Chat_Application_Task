@@ -10,18 +10,18 @@ class MainApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(goRouterProvider);
-    // return MaterialApp.router(
-    //   debugShowCheckedModeBanner: false,
-    //   title: 'Flutter Demo',
-    //   theme: AppTheme.dark,
-    //   routerConfig: router,
-    // );
-
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: AppTheme.dark,
-      home: TestScreen()
+      routerConfig: router,
     );
+
+    // return MaterialApp(
+    //   debugShowCheckedModeBanner: false,
+    //   title: 'Flutter Demo',
+    //   theme: AppTheme.dark,
+    //   home: TestScreen()
+    // );
   }
 }
