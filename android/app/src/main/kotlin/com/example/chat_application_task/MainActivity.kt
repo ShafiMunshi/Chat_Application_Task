@@ -3,6 +3,9 @@ package com.example.chat_application_task
 import com.example.chat_application_task.channel.ChatEventChannelHandler
 import com.example.chat_application_task.channel.ChatMethodChannelHandler
 import com.example.chat_application_task.service.ChatService
+import com.example.chat_application_task.service.ConnectivityService
+import com.example.chat_application_task.service.LocalService
+import com.example.chat_application_task.service.SyncManager
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.EventChannel
@@ -16,13 +19,17 @@ class MainActivity : FlutterActivity() {
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
-        val chatService = ChatService()
+        val chatService         = ChatService()
+        val localService        = LocalService(applicationContext)
+        val connectivityService = ConnectivityService(applicationContext)
+        val syncManager         = SyncManager(connectivityService, localService, chatService)
+
 
         methodChannel = MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             ChatMethodChannelHandler.CHANNEL_NAME,
         )
-        methodChannel.setMethodCallHandler(ChatMethodChannelHandler(chatService))
+        methodChannel.setMethodCallHandler(ChatMethodChannelHandler(syncManager))
 
         eventChannel = EventChannel(
             flutterEngine.dartExecutor.binaryMessenger,

@@ -2,12 +2,12 @@ package com.example.chat_application_task.channel
 
 import android.util.Log
 import com.example.chat_application_task.models.MessageModel
-import com.example.chat_application_task.service.ChatService
+import com.example.chat_application_task.service.SyncManager
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
 class ChatMethodChannelHandler(
-    private val chatService: ChatService,
+    private val syncManager: SyncManager,
 ) : MethodChannel.MethodCallHandler {
 
     companion object {
@@ -34,11 +34,10 @@ class ChatMethodChannelHandler(
 
         val message = MessageModel.fromMap(messageData)
         val chatId = message.chatId
-        chatService.sendMessage(
-            chatId = chatId,
+        syncManager.sendMessage(
             messageData = messageData,
-            onSuccess = { result.success(null) },
-            onError = { e -> result.error("FIRESTORE_ERROR", e.localizedMessage, null) }
+            onSuccess   = { result.success(null) },
+            onError     = { e -> result.error("SEND_ERROR", e.localizedMessage, null) },
         )
     }
 
