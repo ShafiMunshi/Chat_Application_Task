@@ -117,6 +117,25 @@ class LocalService(context: Context) : SQLiteOpenHelper(
         }
     }
 
+    fun getAllPendingMessages(): List<MessageModel> {
+        val messages = mutableListOf<MessageModel>()
+        readableDatabase.use { db ->
+            db.query(
+                TABLE_MESSAGES,
+                null,
+                "$COL_STATUS = ?",
+                arrayOf("pending"),
+                null, null,
+                "$COL_TIMESTAMP ASC",
+            ).use { cursor ->
+                while (cursor.moveToNext()) {
+                    messages.add(cursor.toMessageModel())
+                }
+            }
+        }
+        return messages
+    }
+
     private fun MessageModel.toContentValues() = ContentValues().apply {
         put(COL_MESSAGE_ID,  messageId)
         put(COL_CHAT_ID,     chatId)
