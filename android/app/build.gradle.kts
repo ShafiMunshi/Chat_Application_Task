@@ -64,3 +64,12 @@ flutter {
     source = "../.."
 }
 
+dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:34.7.0"))
+
+    // Required core initialization (brings FirebaseApp)
+    implementation("com.google.firebase:firebase-analytics")
+
+    // Firestore
+    implementation("com.google.firebase:firebase-firestore")
+}

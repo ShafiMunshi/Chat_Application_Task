@@ -93,8 +93,24 @@ class _IndivChatScreenState extends ConsumerState<IndivChatScreen>
     );
 
     try {
-      await ref.read(sendMessageUsecaseProvider).call(message);
-      WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+      final result = await ref.read(sendMessageUsecaseProvider).call(message);
+      result.when(
+        (success) {
+          WidgetsBinding.instance.addPostFrameCallback(
+            (_) => _scrollToBottom(),
+          );
+        },
+        (failure) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Failed to send: ${failure.message}'),
+                backgroundColor: Colors.red.shade700,
+              ),
+            );
+          }
+        },
+      );
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -265,7 +281,7 @@ class _MessageList extends StatelessWidget {
       itemBuilder: (_, i) {
         final cfg = configs[i];
         return ChatBubble(
-          message: cfg.message, 
+          message: cfg.message,
           showDateDivider: cfg.showDateDivider,
           showAvatar: cfg.showAvatar,
           isLastInGroup: cfg.isLastInGroup,
