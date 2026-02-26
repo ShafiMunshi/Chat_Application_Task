@@ -1,5 +1,6 @@
 import 'package:chat_application_task/core/constants/app_strings.dart';
 import 'package:chat_application_task/core/constants/dimens.dart';
+import 'package:chat_application_task/core/shared/widgets/app_snackber.dart';
 import 'package:chat_application_task/core/style/text_styles.dart';
 import 'package:chat_application_task/features/auth/views/provider/sign_up_provider.dart';
 import 'package:chat_application_task/features/auth/views/widgets/app_textfield.dart';
@@ -28,6 +29,12 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     _nameController = TextEditingController();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+
+    ref.listenManual(signUpProvider, (previous, next) {
+      next.hasError
+          ? AppSnackber.showError(context, "${next.error}")
+          : null;
+    });
   }
 
   @override
@@ -164,7 +171,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               data: (value) =>
                   const Text(AppStrings.signUp, style: TextStyle(fontSize: 16)),
               loading: () => const CircularProgressIndicator(),
-              error: (error, stackTrace) => const Text(AppStrings.error),
+              error: (error, stackTrace) => const Text(AppStrings.signUp, style: TextStyle(fontSize: 16)),
             ),
       ),
     );
