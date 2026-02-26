@@ -20,7 +20,7 @@ class AppStrings {
   static const String myMessenger = 'My Messenger';
   static const String searchHint = 'Search messages or contacts';
   static const String userLabelPrefix = 'User ';
-  static const String lastMessagePreview = 'Last message preview...';
+  static const String lastMessagePreview = 'start messaging now...';
 
   // ── Individual Chat ───────────────────────────────────────────────────────
   static const String noMessagesYet = 'No messages yet';
@@ -41,7 +41,6 @@ class AppStrings {
 
   // ── Errors ───────────────────────────────────────────────────────────────
 
-
-  // Drawers 
+  // Drawers
   static const String logout = 'Log Out';
 }
