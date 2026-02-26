@@ -1,3 +1,5 @@
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
+
 import 'package:chat_application_task/core/constants/app_colors.dart';
 import 'package:chat_application_task/core/constants/app_strings.dart';
 import 'package:chat_application_task/core/shared/providers.dart';
@@ -96,9 +98,10 @@ class _IndivChatScreenState extends ConsumerState<IndivChatScreen>
       final result = await ref.read(sendMessageUsecaseProvider).call(message);
       result.when(
         (success) {
-          WidgetsBinding.instance.addPostFrameCallback(
-            (_) => _scrollToBottom(),
-          );
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
+            await ref.read(getUserLastMessageUsecaseProvider.call(widget.chatId));
+            _scrollToBottom();
+          });
         },
         (failure) {
           if (mounted) {

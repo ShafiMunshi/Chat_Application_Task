@@ -2,6 +2,7 @@ import 'package:chat_application_task/core/errors/failures.dart';
 import 'package:chat_application_task/features/auth/data/models/user_model.dart';
 import 'package:chat_application_task/features/auth/domain/entities/user_entity.dart';
 import 'package:chat_application_task/features/chat/data/data/sources/user_remote_sources.dart';
+import 'package:chat_application_task/features/chat/domain/entities/user_last_message_entity.dart';
 import 'package:chat_application_task/features/chat/domain/repo/i_chat_users_repo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:multiple_result/src/result.dart';
@@ -36,6 +37,16 @@ class ChatUsersRepo implements IChatUsersRepo {
       }
     } catch (e) {
       return Result.error(Failure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Result<UserLastMessageEntity, Failure>?> getUserLastMessage(String chatID) async {
+    try {
+      final lastMessage = await _userRemoteSource.getUserLastMessage(chatID);
+      return Result.success(lastMessage.toEntity());
+    } catch (e) {
+      return Result.error(Failure.mapExceptionToFailure(e));
     }
   }
 }

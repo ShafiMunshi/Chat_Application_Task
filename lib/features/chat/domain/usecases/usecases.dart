@@ -14,6 +14,13 @@ final getUserByIdUsecaseProvider = Provider<GetUserByIdUsecase>((ref) {
   return GetUserByIdUsecase(chatUsersRepo);
 });
 
+final getUserLastMessageUsecaseProvider = Provider<GetUserLastMessageUsecase>((
+  ref,
+) {
+  final chatUsersRepo = ref.watch(chatUsersRepoProvider);
+  return GetUserLastMessageUsecase(chatUsersRepo);
+});
+
 final getChatMessagesUsecaseProvider = Provider<GetChatMessagesUsecase>((ref) {
   final chatRepo = ref.watch(chatRepoProvider);
   return GetChatMessagesUsecase(chatRepo);
