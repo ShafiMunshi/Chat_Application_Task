@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:chat_application_task/core/constants/app_strings.dart';
 import 'package:chat_application_task/core/constants/dimens.dart';
+import 'package:chat_application_task/core/shared/widgets/app_snackber.dart';
 import 'package:chat_application_task/core/style/text_styles.dart';
 import 'package:chat_application_task/features/auth/views/provider/sign_in_provider.dart';
 import 'package:chat_application_task/features/auth/views/widgets/app_textfield.dart';
@@ -28,6 +29,10 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+
+    ref.listenManual(signInProvider, (previous, next) {
+      next.hasError ? AppSnackber.showError(context, "${next.error}") : null;
+    });
   }
 
   @override
@@ -102,7 +107,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           controller: _passwordController,
           hintText: AppStrings.enterYourPassword,
           isPassword: true,
-          validator: ValidationBuilder().minLength(6).build(),
+          validator: ValidationBuilder().required().build(),
         ),
       ],
     );
@@ -148,7 +153,8 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               data: (value) =>
                   const Text(AppStrings.signIn, style: TextStyle(fontSize: 16)),
               loading: () => const CircularProgressIndicator(),
-              error: (error, stackTrace) => const Text(AppStrings.error),
+              error: (error, stackTrace) =>
+                  const Text(AppStrings.signIn, style: TextStyle(fontSize: 16)),
             ),
       ),
     );
