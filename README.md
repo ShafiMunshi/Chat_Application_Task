@@ -18,11 +18,14 @@ This chat application is designed to provide users with a comprehensive messagin
 - All the business logic which are related to chat are working via Platfrom Channel
 
 ### Apps User Interface
-![Create Account](ss0.png)
-![Sign In](ss1png)
-![Chat User Lists](ss3.png)
-![Chat UI](ss4.png)
+<h3>Apps User Interface</h3>
 
+<p align="center">
+  <img src="ss0.png" width="20%" />
+  <img src="ss1.png" width="20%" />
+  <img src="ss3.png" width="20%" />
+  <img src="ss4.png" width="20%" />
+</p>
   
 
 ## ⚙️ Installation
