@@ -17,7 +17,6 @@ This chat application is designed to provide users with a comprehensive messagin
 - GoRouter - to handle route management
 - All the business logic which are related to chat are working via Platfrom Channel
 
-### Apps User Interface
 <h3>Apps User Interface</h3>
 
 <p align="center">
