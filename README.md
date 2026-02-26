@@ -1,16 +1,18 @@
-# chat_application_task
+# Chat Application Task
 
-A new Flutter project.
+A modern, real-time chat application built with Flutter and Firebase. This cross-platform mobile app offers seamless messaging experience, offline support, and beautiful Material Design UI.
 
-## Getting Started
+## Project Overview
 
-This project is a starting point for a Flutter application.
+This chat application is designed to provide users with a comprehensive messaging platform featuring real-time communication and robust offline functionality. The app follows clean architecture principles and includes features like user authentication, message synchronization, and responsive design for both phones and tablets.
 
-A few resources to get you started if this is your first Flutter project:
+### Technical Stuff
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Followed **Clean Architecture** Pattern - Separation of concerns with domain, data, and views layers
+- used Riverpod for efficient state handling
+- Firebase Firestore for real-time database and Auth for authentication
+- SQLite for offline message storage
+- Multiple flavors ( Development, Staging, Production)
+- GoRouter - to handle route management
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Apps User Interface
