@@ -9,7 +9,7 @@ import com.google.firebase.firestore.SetOptions
 
 class ChatService {
 
-    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val db: FirebaseFirestore get() = FirebaseFirestore.getInstance()
 
     private val chatCollection = "CHATS"
     private val messageCollection = "MESSAGES"

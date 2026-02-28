@@ -107,29 +107,34 @@ class SyncManager(
     }
 
     private fun startFirestoreListener(chatId: String) {
-        val reg = chatService.listenForMessages(
-            chatId   = chatId,
-            onUpdate = { remoteMaps ->
-                remoteMaps.forEach { map ->
-                    try {
-                        val remote = MessageModel.fromMap(
-                            map.toMutableMap().apply { put("status", "sent") }
-                        )
-                        val existing = localService.getIndivMessage(remote.messageId)
-                        // Never overwrite a locally pending message
-                        if (existing == null || existing.status != "pending") {
-                            localService.insertMessage(remote)
+        val reg = try {
+            chatService.listenForMessages(
+                chatId   = chatId,
+                onUpdate = { remoteMaps ->
+                    remoteMaps.forEach { map ->
+                        try {
+                            val remote = MessageModel.fromMap(
+                                map.toMutableMap().apply { put("status", "sent") }
+                            )
+                            val existing = localService.getIndivMessage(remote.messageId)
+                            // Never overwrite a locally pending message
+                            if (existing == null || existing.status != "pending") {
+                                localService.insertMessage(remote)
+                            }
+                        } catch (e: Exception) {
+                            Log.e("SyncManager", "Parse error: ${e.message}")
                         }
-                    } catch (e: Exception) {
-                        Log.e("SyncManager", "Parse error: ${e.message}")
                     }
-                }
-                notifySubscribers(chatId)
-            },
-            onError  = { e ->
-                Log.e("SyncManager", "Firestore error $chatId: ${e.message}")
-            },
-        )
+                    notifySubscribers(chatId)
+                },
+                onError  = { e ->
+                    Log.e("SyncManager", "Firestore error $chatId: ${e.message}")
+                },
+            )
+        } catch (e: Exception) {
+            Log.e("SyncManager", "startFirestoreListener failed for $chatId: ${e.message}")
+            return
+        }
         firestoreListeners[chatId] = reg
     }
 }
