@@ -1,5 +1,6 @@
 package com.example.chat_application_task.channel
 
+import android.util.Log
 import com.example.chat_application_task.models.MessageModel
 import com.example.chat_application_task.service.SyncManager
 import io.flutter.plugin.common.EventChannel
@@ -10,6 +11,7 @@ class LocalEventChannelHandler(
 
     companion object {
         const val CHANNEL_NAME = "com.example.chat/local_messages"
+        private const val TAG = "LocalEventChannel"
     }
 
     private var activeSink: EventChannel.EventSink? = null
@@ -22,8 +24,13 @@ class LocalEventChannelHandler(
             return
         }
 
-        // Cancel any previous subscription (handles hot restart ordering)
-        cancelHandler?.invoke()
+        // Clean up any previous subscription (handles hot restart)
+        try {
+            cancelHandler?.invoke()
+        } catch (e: Throwable) {
+            Log.w(TAG, "Error cleaning up previous stream: ${e.message}")
+        }
+        cancelHandler = null
         activeSink = events
 
         val callback: (List<MessageModel>) -> Unit = { messages ->
@@ -40,11 +47,22 @@ class LocalEventChannelHandler(
                             "timestamp"  to msg.timestamp,
                         )
                     })
-                } catch (_: Throwable) { /* messenger shut down */ }
+                } catch (e: Throwable) {
+                    Log.w(TAG, "Sink already closed, ignoring: ${e.message}")
+                }
             }
         }
 
-        syncManager.subscribe(chatId, callback)
+        try {
+            syncManager.subscribe(chatId, callback)
+        } catch (e: Exception) {
+            Log.e(TAG, "subscribe failed: ${e.message}", e)
+            // Clean up the state we just set so onCancel doesn't double-fire
+            cancelHandler = null
+            activeSink = null
+            events.error("error", e.message, null)
+            return
+        }
 
         cancelHandler = {
             if (activeSink === events) activeSink = null
@@ -53,7 +71,12 @@ class LocalEventChannelHandler(
     }
 
     override fun onCancel(arguments: Any?) {
-        cancelHandler?.invoke()
+        try {
+            cancelHandler?.invoke()
+        } catch (e: Throwable) {
+            Log.w(TAG, "Error during onCancel: ${e.message}")
+        }
         cancelHandler = null
+        activeSink = null
     }
 }
